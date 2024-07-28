@@ -67,11 +67,9 @@ export const Main: React.FC = ({ navigation }: any) => {
         switch (action.type) {
             case 'moveX':
                 translationX.value = withTiming(translationX.value + action.value, { duration: 500 }, () => runOnJS(runActions)(index + 1));
-                setCoordinates({ x: translationX.value + action.value, y: 0 });
                 break;
             case 'moveY':
                 translationY.value = withTiming(translationY.value + action.value, { duration: 500 }, () => runOnJS(runActions)(index + 1));
-                setCoordinates({ x: 0, y: translationY.value + action.value });
                 break;
             case 'rotate':
                 rotation.value = withTiming(rotation.value + action.value, { duration: 500 }, () => runOnJS(runActions)(index + 1));
