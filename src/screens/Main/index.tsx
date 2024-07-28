@@ -194,7 +194,7 @@ export const Main: React.FC = ({ navigation }: any) => {
                 id: image.path.split('/').pop() || Math.random().toString(),
                 uri: { uri: image.path },
                 text: `Item ${data.length + 1}`,
-                spritName: 'Ball',
+                spritName: `Item ${data.length + 1}`,
             };
             const updatedData = [...data, newItem];
             setData(updatedData);
