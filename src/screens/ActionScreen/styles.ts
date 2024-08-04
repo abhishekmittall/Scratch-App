@@ -124,6 +124,21 @@ export const styles = StyleSheet.create({
         color: '#0FBD8C',
         fontWeight: '700'
     },
+    actionTabViewContainer: {
+        flexGrow: 1
+    },
+    actionTabView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
+    },
+    actionTabText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 14,
+        lineHeight: 18
+    },
     selectedActionView: {
         justifyContent: 'center',
         alignItems: 'center',

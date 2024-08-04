@@ -25,8 +25,8 @@ export const styles = StyleSheet.create({
         height: 100
     },
     spritImage: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         resizeMode: 'contain',
         rowGap: 8,
     },
@@ -121,11 +121,27 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         borderRadius: 8,
         borderWidth: 1,
+        overflow: 'hidden'
     },
     paparticularSpritImgView: {
         flex: 1,
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    actionTagView: {
+        backgroundColor: '#0FBD8C',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        zIndex: 999,
+        bottom: 10
+    },
+    actionTagViewText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 10,
+        lineHeight: 16
     },
     paparticularSpritImg: {
         width: 48,
@@ -137,9 +153,6 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#855cd6',
         padding: 6,
-        borderBottomLeftRadius: 8,
-        borderBottomRightRadius: 8,
-        overflow: 'hidden'
     },
     addActionText: {
         color: '#fff',

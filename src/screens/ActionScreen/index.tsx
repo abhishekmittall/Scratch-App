@@ -14,7 +14,6 @@ import Animated, {
     runOnJS,
 } from 'react-native-reanimated';
 
-
 const getColorForIndex = (index: any) => {
     const hue = (index * 55) % 360;
     const bgColor = `hsl(${hue}, 60%, 80%)`;
@@ -22,9 +21,10 @@ const getColorForIndex = (index: any) => {
     return { bgColor, borderColor }
 };
 
-export const ActionScreen: React.FC = ({ navigation }: any) => {
-
-    const [droppedItems, setDroppedItems] = useState<any[]>([]);
+export const ActionScreen: React.FC = ({ route, navigation }: any) => {
+    const { data } = route.params;
+    const [droppedItems, setDroppedItems] = useState<any[]>(data);
+    const [selectedTab, setSelectedTab] = useState<number>(0);
 
     useEffect(() => {
         const fetchStoredItems = async () => {
@@ -36,19 +36,24 @@ export const ActionScreen: React.FC = ({ navigation }: any) => {
         fetchStoredItems();
     }, []);
 
-    const handleDrop = (action: any) => {
+    const handleDrop = (index: any, action: any) => {
         setDroppedItems((prevItems) => {
-            if (!prevItems.some((item) => item.id === action.id)) {
-                return [...prevItems, action];
+            if (!prevItems[index]?.actions.some((item: any) => item.id === action.id)) {
+                const updatedImages = [...prevItems];
+                updatedImages[index].actions.push(action);
+                return updatedImages;
             }
             return prevItems;
         });
     };
 
     const handleRemoveAction = (id: number) => {
-        setDroppedItems((prevItems) =>
-            prevItems.filter((item) => item.id !== id)
-        );
+        setDroppedItems((prev) => {
+            const newActions = [...prev];
+            const index = newActions.findIndex(item => item?.id == selectedTab + 1);
+            newActions[index].actions = newActions[index].actions.filter((a: any) => a.id !== id);
+            return newActions;
+        });
     };
 
     const handleDone = async () => {
@@ -118,13 +123,13 @@ export const ActionScreen: React.FC = ({ navigation }: any) => {
                                 ListEmptyComponent={
                                     <View style={styles.emptyView}>
                                         <Text style={styles.emptyText}>
-                                            No one action selected!
+                                            Please select any action block!
                                         </Text>
                                     </View>
                                 }
                                 renderItem={({ item, index }: any) => {
                                     return (
-                                        <DraggableItem action={item} index={selectedActionIndex} onDrop={handleDrop} />
+                                        <DraggableItem action={item} index={selectedActionIndex} onDrop={(action: any) => handleDrop(selectedTab, action)} />
                                     )
                                 }}
                             />
@@ -142,10 +147,33 @@ export const ActionScreen: React.FC = ({ navigation }: any) => {
                         />
                         <Text style={styles.actionsText}>ACTION</Text>
                     </View>
-
+                    <View>
+                        <FlatList
+                            data={data}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.actionTabViewContainer}
+                            keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
+                            renderItem={({ item, index }: any) => {
+                                return (
+                                    <TouchableOpacity
+                                        activeOpacity={0.5}
+                                        style={[styles.actionTabView, {
+                                            backgroundColor:
+                                                selectedTab === index ? '#0FBD8C' : '#E0E0E0',
+                                        }]}
+                                        onPress={() => setSelectedTab(index)}>
+                                        <Text style={styles.actionTabText}>
+                                            Action {index + 1}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }}
+                        />
+                    </View>
                     <View style={styles.screenViewContainer}>
                         <FlatList
-                            data={droppedItems}
+                            data={droppedItems[selectedTab]?.actions}
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.selectActionView}
                             keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
